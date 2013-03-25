@@ -29,7 +29,7 @@
     resources,
     template
 ) {
-    return declare("joel.components.CreateContentInSlice",
+    return declare("powerslice.components.CreateContentInSlice",
         [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
             templateString: template,
             epi: epi,
@@ -52,7 +52,7 @@
 
             _createContent: function() {
                 var settings = this.settings;
-                topic.publish("/epi/shell/action/changeview", "joel/components/CreateSpecificContent", null, {
+                topic.publish("/epi/shell/action/changeview", "powerslice/components/CreateSpecificContent", null, {
                     predefinedParentId: settings.parent,
                     predefinedContentTypeId: settings.contentTypeId,
                     predefinedContentName: lang.trim(this.contentName.get("value"))

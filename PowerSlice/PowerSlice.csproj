@@ -175,6 +175,7 @@
     <Content Include="lang\PowerSlice.xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="module.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

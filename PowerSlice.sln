@@ -1,7 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerSlice", "PowerSlice/PowerSlice.csproj", "{5F76D9CF-1487-465F-B092-B3E4F44EF0FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerSlice", "PowerSlice\PowerSlice.csproj", "{5F76D9CF-1487-465F-B092-B3E4F44EF0FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3A99A9FC-C2FC-4774-8827-6E340B6990E9}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,8 +16,8 @@
     "dijit/MenuItem",
     "dijit/form/DropDownButton",
 //Custom
-    "joel/components/ContentSliceGrid",
-    "joel/components/CreateContentInSlice",
+    "powerslice/components/ContentSliceGrid",
+    "powerslice/components/CreateContentInSlice",
     "epi/i18n!epi/cms/nls/powerslice.slice",
     "dojo/text!./templates/ContentSlice.html"
 ], function (
@@ -43,7 +43,7 @@
     resources,
     template
 ) {
-    return declare("joel.components.ContentSlice",
+    return declare("powerslice.components.ContentSlice",
         [_Container, _LayoutWidget, _TemplatedMixin, _WidgetsInTemplateMixin], {
             templateString: template,
             resources: resources,

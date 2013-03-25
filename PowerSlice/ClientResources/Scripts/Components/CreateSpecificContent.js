@@ -1,4 +1,4 @@
-﻿define("joel/components/CreateSpecificContent", [
+﻿define("powerslice/components/CreateSpecificContent", [
     "dojo",
     "dojo/i18n",
     "dojo/dom-attr",
@@ -11,7 +11,7 @@
     // summary:
     //    Widget for language branch creation.
 
-    return dojo.declare("joel.components.CreateSpecificContent", [CreateContent], {
+    return dojo.declare("powerslice.components.CreateSpecificContent", [CreateContent], {
 
         contentTypeStore: null,
 
