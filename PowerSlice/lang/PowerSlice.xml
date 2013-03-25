@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="English" id="en">
+    <powerslice>
+      <slice>
+        <reloadbutton>Reload</reloadbutton>
+        <createbutton>
+          <multipleoptions>Create content</multipleoptions>
+          <singleoptionprefix>New</singleoptionprefix>
+        </createbutton>
+      </slice>
+      <createdialog>
+        <headerprefix>New</headerprefix>
+        <namelabel>Name</namelabel>
+        <createbutton>
+          <caption>Create</caption>
+        </createbutton>
+        <cancelbutton>
+          <caption>Cancel</caption>
+        </cancelbutton>
+      </createdialog>
+    </powerslice>
+  </language>
+</languages>
