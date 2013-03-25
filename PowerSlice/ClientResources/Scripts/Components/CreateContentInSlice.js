@@ -69,9 +69,4 @@
                 this.destroy();
             }
         });
-{
-    substuff: {
-                    key: "value"
-                }
-}
 });
