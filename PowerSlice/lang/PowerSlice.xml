@@ -8,6 +8,12 @@
           <multipleoptions>Create content</multipleoptions>
           <singleoptionprefix>New</singleoptionprefix>
         </createbutton>
+        <sortbyname>
+          <caption>Name</caption>
+        </sortbyname>
+        <sortbystartpublish>
+          <caption>Publish date</caption>
+        </sortbystartpublish>
       </slice>
       <createdialog>
         <headerprefix>New</headerprefix>

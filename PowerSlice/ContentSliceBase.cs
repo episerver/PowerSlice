@@ -14,7 +14,7 @@ using EPiServer.Shell.Services.Rest;
 namespace PowerSlice
 {
     public abstract class ContentSliceBase<TContent> : IContentSlice, ISortableContentSlice<TContent> 
-        where TContent : IContent
+        where TContent : IContentData
     {
         protected IClient SearchClient;
         protected IContentTypeRepository ContentTypeRepository;
@@ -28,13 +28,14 @@ namespace PowerSlice
         }
 
         protected ContentSliceBase()
-            : this(ServiceLocator.Current.GetInstance<IClient>(), ServiceLocator.Current.GetInstance<IContentTypeRepository>(), ServiceLocator.Current.GetInstance<IContentLoader>())
+            : this(EPiServer.Find.Framework.SearchClient.Instance, ServiceLocator.Current.GetInstance<IContentTypeRepository>(), ServiceLocator.Current.GetInstance<IContentLoader>())
         {}
 
         public virtual ContentRange ExecuteQuery(ContentQueryParameters parameters)
         {
             var searchRequest = SearchClient.Search<TContent>()
                 .FilterOnLanguages(new [] { parameters.CurrentLanguage });
+
             var searchPhrase = parameters.AllParameters["q"];
             var hasFreeTextQuery = !string.IsNullOrWhiteSpace(searchPhrase) && searchPhrase != "*";
             if (hasFreeTextQuery)
@@ -91,15 +92,18 @@ namespace PowerSlice
         protected virtual ITypeSearch<TContent> ApplyTextSearch(ITypeSearch<TContent> searchRequest, string searchPhrase)
         {
             return searchRequest.For(searchPhrase)
-                                .InField(x => x.Name, 2)
-                                .InField(x => x.SearchText())
-                                .Include(x => x.Name.PrefixCaseInsensitive(searchPhrase), 1.5)
-                                .Include(x => x.Name.AnyWordBeginsWith(searchPhrase));
+                                .InField(x => ((IContent) x).Name, 2)
+                                .InField(x => ((IContent)x).SearchText())
+                                .Include(x => ((IContent)x).Name.PrefixCaseInsensitive(searchPhrase), 1.5)
+                                .Include(x => ((IContent)x).Name.AnyWordBeginsWith(searchPhrase));
         }
 
         public abstract string Name { get; }
 
-        public abstract int Order { get; }
+        public virtual int Order
+        {
+            get { return 0; }
+        }
 
         public virtual IEnumerable<CreateOption> CreateOptions
         {
@@ -139,19 +143,19 @@ namespace PowerSlice
 
         protected static SortAction<TContent> CreateNameSortAction()
         {
-            return new SortAction<TContent>(LocalizationService.Current.GetString("/pagetypes/common/property[@name='icontent_name']/caption"), "name", (search, order) =>
+            return new SortAction<TContent>(LocalizationService.Current.GetString("/powerslice/slice/sortbyname/caption"), "name", (search, order) =>
                 {
                     if (order == SortOrder.Ascending)
                     {
-                        return search.OrderBy(x => x.Name);
+                        return search.OrderBy(x => ((IContent)x).Name);
                     }
-                    return search.OrderByDescending(x => x.Name);
+                    return search.OrderByDescending(x => ((IContent)x).Name);
                 });
         }
 
         protected static SortAction<TContent> CreateDescendingStartPublishSortAction()
         {
-            return new SortAction<TContent>(LocalizationService.Current.GetString("/pagetypes/common/property[@name='iversionable_startpublish']/caption"), "startpublish", (search, order) =>
+            return new SortAction<TContent>(LocalizationService.Current.GetString("/powerslice/slice/sortbystartpublish/caption"), "startpublish", (search, order) =>
             {
                 if (order == SortOrder.Ascending)
                 {

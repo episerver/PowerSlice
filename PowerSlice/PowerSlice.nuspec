@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Joel Abrahamsson, Abrahamsson Software AB</authors>
+    <owners>Joel Abrahamsson, Abrahamsson Software AB</owners>
+    <projectUrl>http://joelabrahamsson.com/powerslice/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easily list EPiServer CMS content for editors</description>
+    <copyright>Copy left and right 2013</copyright>
+  </metadata>
+  <files>
+    <file src="module.config" target="content\modules\PowerSlice\" /> 
+    <file src="Scripts\**\*.*" target="content\modules\PowerSlice\Scripts\" /> 
+    <file src="web.config.transform" target="content\" />
+    <file src="..\assets\readme.txt" target="" />
+  </files>
+</package>

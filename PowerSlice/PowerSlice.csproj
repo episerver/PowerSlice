@@ -166,13 +166,13 @@
     <Compile Include="SortOption.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ClientResources\Scripts\Components\ContentSlice.js" />
-    <Content Include="ClientResources\Scripts\Components\ContentSliceGrid.js" />
-    <Content Include="ClientResources\Scripts\Components\CreateContentInSlice.js" />
-    <Content Include="ClientResources\Scripts\Components\CreateSpecificContent.js" />
-    <Content Include="ClientResources\Scripts\Components\templates\ContentSlice.html" />
-    <Content Include="ClientResources\Scripts\Components\templates\CreateContentInSlice.html" />
-    <Content Include="lang\PowerSlice.xml" />
+    <None Include="Scripts\Components\ContentSlice.js" />
+    <None Include="Scripts\Components\ContentSliceGrid.js" />
+    <None Include="Scripts\Components\CreateContentInSlice.js" />
+    <None Include="Scripts\Components\CreateSpecificContent.js" />
+    <None Include="Scripts\Components\templates\ContentSlice.html" />
+    <None Include="Scripts\Components\templates\CreateContentInSlice.html" />
+    <EmbeddedResource Include="lang\PowerSlice.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="module.config" />
