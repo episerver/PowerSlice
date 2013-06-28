@@ -34,7 +34,7 @@ namespace PowerSlice
         public virtual ContentRange ExecuteQuery(ContentQueryParameters parameters)
         {
             var searchRequest = SearchClient.Search<TContent>()
-                .FilterOnLanguages(new [] { parameters.CurrentLanguage });
+                .FilterOnLanguages(new [] { parameters.PreferredCulture.Name });
 
             var searchPhrase = parameters.AllParameters["q"];
             var hasFreeTextQuery = !string.IsNullOrWhiteSpace(searchPhrase) && searchPhrase != "*";

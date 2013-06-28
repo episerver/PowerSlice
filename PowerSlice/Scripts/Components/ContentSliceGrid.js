@@ -3,8 +3,8 @@
     "dojo/_base/lang",
     "epi",
     "epi/dependency",
-    "epi/cms/dgrid/DnD",
-    "epi/cms/component/ContentQueryGrid"
+    "epi-cms/dgrid/DnD",
+    "epi-cms/component/ContentQueryGrid"
 ], function (dojo, lang, epi, dependency, DnD, ContentQueryGrid) {
 
     return dojo.declare("powerslice.components.ContentSliceGrid", [ContentQueryGrid], {

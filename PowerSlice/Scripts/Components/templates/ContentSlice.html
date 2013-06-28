@@ -3,13 +3,13 @@
     <div class="epi-gadgetInnerToolbar" data-dojo-attach-point="toolbar">
         <div data-dojo-attach-point="tools">
             <div data-dojo-attach-point="queryNode">
-                <div data-dojo-type="dijit.form.TextBox"
+                <div data-dojo-type="dijit/form/TextBox"
                      data-dojo-attach-point="queryText"
                      data-dojo-props="intermediateChanges:true"
                      data-dojo-attach-event="onChange: _queryTextChanged">
                 </div>
         
-                <div data-dojo-type="dijit.form.Button" 
+                <div data-dojo-type="dijit/form/Button" 
                      data-dojo-attach-point="reloadButton" 
                      data-dojo-attach-event="onClick: _reloadQuery"
                      data-dojo-props="title: '${resources.reloadbutton}'" 
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div data-dojo-type="powerslice.components.ContentSliceGrid" data-dojo-attach-point="contentQuery">
+    <div data-dojo-type="powerslice/components/ContentSliceGrid" data-dojo-attach-point="contentQuery">
 
     </div>
 

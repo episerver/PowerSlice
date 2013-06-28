@@ -5,7 +5,7 @@
     "dojo/_base/lang",
     "dijit",
     "epi/dependency",
-    "epi/cms/component/CreateContent",
+    "epi-cms/component/CreateContent",
     "epi/i18n!epi/cms/nls/episerver.cms.components.createpage"
 ], function (dojo, i18n, domAttr, lang, dijit, dependency, CreateContent, res) {
     // summary:

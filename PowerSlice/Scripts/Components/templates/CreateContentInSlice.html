@@ -1,11 +1,11 @@
 ﻿<div>
     <div><strong>${resources.headerprefix} ${settings.label}</strong></div>
     <label>${resources.namelabel}:</label>
-    <input type="text" size="20" data-dojo-type="dijit.form.TextBox"
+    <input type="text" size="20" data-dojo-type="dijit/form/TextBox"
            data-dojo-attach-event="onChange: _nameChanged"
            data-dojo-props="intermediateChanges:true"
            data-dojo-attach-point="contentName">
     </input>
-    <button data-dojo-type="dijit.form.Button" data-dojo-attach-point="createButton" data-dojo-attach-event="onClick: _createContent">${resources.createbutton.caption}</button>
-    <button data-dojo-type="dijit.form.Button" data-dojo-attach-point="cancelButton" data-dojo-attach-event="onClick: _cancel" style="float: right;">${resources.cancelbutton.caption}</button>
+    <button data-dojo-type="dijit/form/Button" data-dojo-attach-point="createButton" data-dojo-attach-event="onClick: _createContent">${resources.createbutton.caption}</button>
+    <button data-dojo-type="dijit/form/Button" data-dojo-attach-point="cancelButton" data-dojo-attach-event="onClick: _cancel" style="float: right;">${resources.cancelbutton.caption}</button>
 </div>
