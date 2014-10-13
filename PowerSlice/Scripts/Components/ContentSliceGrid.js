@@ -1,13 +1,9 @@
-﻿define("powerslice/components/ContentSliceGrid", [
-    "dojo",
-    "dojo/_base/lang",
-    "epi",
-    "epi/dependency",
-    "epi-cms/dgrid/DnD",
+﻿define([
+    "dojo/_base/declare",
     "epi-cms/component/ContentQueryGrid"
-], function (dojo, lang, epi, dependency, DnD, ContentQueryGrid) {
+], function (declare, ContentQueryGrid) {
 
-    return dojo.declare("powerslice.components.ContentSliceGrid", [ContentQueryGrid], {
+    return declare([ContentQueryGrid], {
         sortKey: null,
         descending: false,
         

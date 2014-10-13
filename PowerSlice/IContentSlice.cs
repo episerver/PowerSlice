@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
+using EPiServer.Shell.ContentQuery;
 
 namespace PowerSlice
 {

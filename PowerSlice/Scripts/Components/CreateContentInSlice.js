@@ -1,11 +1,9 @@
 ﻿define([
 // Dojo
-    "dojo",
     "dojo/_base/declare",
-    "dojo/_base/array",
+    "dojo/_base/lang",
     "dojo/topic",
     "dojo/dom-geometry",
-    "dojo/_base/lang",
 // Dijit
     "dijit/_Widget",
     "dijit/_TemplatedMixin",
@@ -15,12 +13,10 @@
     "dojo/text!./templates/CreateContentInSlice.html"
 ], function (
 // Dojo
-    dojo,
     declare,
-    array,
+    lang,
     topic,
     domGeometry,
-    lang,
 // Dijit
     _Widget,
     _TemplatedMixin,
@@ -29,8 +25,7 @@
     resources,
     template
 ) {
-    return declare("powerslice.components.CreateContentInSlice",
-        [_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_Widget, _TemplatedMixin, _WidgetsInTemplateMixin], {
             templateString: template,
             epi: epi,
             resources: resources,

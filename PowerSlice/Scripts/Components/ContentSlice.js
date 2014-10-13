@@ -43,7 +43,7 @@
     resources,
     template
 ) {
-    return declare("powerslice.components.ContentSlice",
+    return declare(
         [_Container, _LayoutWidget, _TemplatedMixin, _WidgetsInTemplateMixin], {
             templateString: template,
             resources: resources,

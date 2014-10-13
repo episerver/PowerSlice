@@ -1,17 +1,16 @@
-﻿define("powerslice/components/CreateSpecificContent", [
-    "dojo",
-    "dojo/i18n",
-    "dojo/dom-attr",
+﻿define([
+    "dojo/_base/declare",
     "dojo/_base/lang",
-    "dijit",
+    "dojo/dom-attr",
+    "dojo/on",
     "epi/dependency",
     "epi-cms/component/CreateContent",
     "epi/i18n!epi/cms/nls/episerver.cms.components.createpage"
-], function (dojo, i18n, domAttr, lang, dijit, dependency, CreateContent, res) {
+], function (declare, lang, domAttr, on, dependency, CreateContent, res) {
     // summary:
     //    Widget for language branch creation.
 
-    return dojo.declare("powerslice.components.CreateSpecificContent", [CreateContent], {
+    return declare([CreateContent], {
 
         contentTypeStore: null,
 
@@ -34,9 +33,9 @@
 
             this.inherited(arguments);
 
-            dojo.when(this.contentDataStore.get(this.predefinedParentId), dojo.hitch(this, function (parent) {
+            on(this.contentDataStore.get(this.predefinedParentId), lang.hitch(this, function (parent) {
                 this.set("parent", parent);
-                dojo.when(this.contentTypeStore.get(this.predefinedContentTypeId), dojo.hitch(this, function (contentType) {
+                on(this.contentTypeStore.get(this.predefinedContentTypeId), lang.hitch(this, function (contentType) {
                     this.selectedContentType = contentType;
                     this._tryCreateContent(this.predefinedContentName, contentType);
                 }));
