@@ -2,11 +2,11 @@
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/dom-attr",
-    "dojo/on",
+    "dojo/promise/all",
     "epi/dependency",
-    "epi-cms/component/CreateContent",
+    "epi-cms/contentediting/CreateContent",
     "epi/i18n!epi/cms/nls/episerver.cms.components.createpage"
-], function (declare, lang, domAttr, on, dependency, CreateContent, res) {
+], function (declare, lang, domAttr, all, dependency, CreateContent, res) {
     // summary:
     //    Widget for language branch creation.
 
@@ -24,28 +24,27 @@
         },
 
         postCreate: function () {
-            this.skipContentTypeSelection = true;
             this.inherited(arguments);
+            this.skipContentTypeSelection = true;
         },
 
         updateView: function (data) {
             this.set("res", res);
 
-            this.inherited(arguments);
+            var inherited = this.getInherited(arguments),
+                self = this;
 
-            on(this.contentDataStore.get(this.predefinedParentId), lang.hitch(this, function (parent) {
-                this.set("parent", parent);
-                on(this.contentTypeStore.get(this.predefinedContentTypeId), lang.hitch(this, function (contentType) {
-                    this.selectedContentType = contentType;
-                    this._tryCreateContent(this.predefinedContentName, contentType);
-                }));
-            }));
-        },
-
-        getContentName: function () {
-            return this.predefinedContentName;
+            all({
+                parent: this.model.contentDataStore.get(data.predefinedParentId),
+                contentType: this.contentTypeStore.get(data.predefinedContentTypeId)
+            }).then(function(results) {
+                    inherited.call(self, {
+                        requestedType: results.contentType.typeIdentifier,
+                        parent: results.parent
+                    });
+                    self.model.set("contentName", data.predefinedContentName);
+                }
+            );
         }
-
     });
-
 });

@@ -1,0 +1,11 @@
+﻿<div class="epi-formContainer">
+    <div data-dojo-attach-point="messageNode"></div>
+    <br />
+    <div>
+        <label data-dojo-attach-point="contentNameLabelNode">${nameLabel}</label>
+        <input type="text" size="40" maxlength="255"  data-dojo-attach-point="contentNameTextbox" data-dojo-type="dijit/form/ValidationTextBox"
+                data-dojo-props="required: true, trim:true, selectOnClick: true"
+                data-dojo-attach-event="onBlur: _onBlurVerifyContent"
+                missingMessage: "${i18n.errormessage.missingmessage}" />
+    </div>
+</div>

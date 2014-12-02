@@ -16,45 +16,24 @@ namespace PowerSlice
         public SlicesComponent()
             : this(ServiceLocator.Current.GetAllInstances<IContentSlice>()) {}
 
-        public SlicesComponent(IEnumerable<IContentSlice> slices) : base("powerslice.components.ContentSliceGroup")
+        public SlicesComponent(IEnumerable<IContentSlice> slices) : base("powerslice/components/ContentSlice")
         {
             _slices = slices;
             Categories = new [] { "cms" };
 
             PlugInAreas = new [] { "/episerver/cms/assets" };
-            base.Title = "Content slices";
+            base.Title = "Powerslice";
         }
 
+        /// <summary>
+        /// Creates the component.
+        /// </summary>
+        /// <returns>The component</returns>
         public override IComponent CreateComponent()
         {
-            //var container = new ComponentGroup("Content");
-            var container = new ComponentGroup() {Heading = "PowerSlice Content"};
-            container.ContainerType = ContainerType.System;
-
-            //Check how to create a container.
-            //var container = base.CreateComponent() as IContainer;// { Heading = "Content" };
-            //container.ContainerType = ContainerType.System;
-
-            foreach (var slice in _slices.OrderByDescending(x => x.Order))
-            {
-                var listComponent = new ContentSliceComponent
-                    {
-                        Heading = slice.Name
-                    };
-                listComponent.Settings["queryName"] = slice.Name;
-                listComponent.Settings["heading"] = slice.Name;
-                listComponent.Settings["createOptions"] = slice.CreateOptions;
-                var sortableSlice = slice as ISortableContentSlice;
-                if (sortableSlice != null)
-                {
-                    listComponent.Settings["sortOptions"] = sortableSlice.SortOptions;
-                    listComponent.Settings["defaultSortOption"] = sortableSlice.DefaultSortOption;
-                    listComponent.Settings["hideSortOptions"] = sortableSlice.HideSortOptions;
-                }
-                container.Add(listComponent);
-            }
-
-            return container;
+            var component = base.CreateComponent();   
+            component.Settings.Add(new Setting("queries", _slices.ToList(), false));
+            return component;
         }
     }
 }

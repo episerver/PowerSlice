@@ -156,6 +156,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyResourceProvider.cs" />
+    <Compile Include="AssemblyResourceProviderRegistrationModule.cs" />
     <Compile Include="ContentSliceBase.cs" />
     <Compile Include="ContentSliceComponent.cs" />
     <Compile Include="CreateOption.cs" />
@@ -167,22 +169,39 @@
     <Compile Include="SortOption.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Components\ContentSlice.js" />
-    <None Include="Scripts\Components\ContentSliceGrid.js" />
-    <None Include="Scripts\Components\CreateContentInSlice.js" />
-    <None Include="Scripts\Components\CreateSpecificContent.js" />
-    <None Include="Scripts\Components\templates\ContentSlice.html" />
-    <None Include="Scripts\Components\templates\CreateContentInSlice.html" />
+    <EmbeddedResource Include="Scripts\components\ContentSlice.js" />
+    <EmbeddedResource Include="Scripts\components\ContentSliceGrid.js" />
+    <EmbeddedResource Include="Scripts\components\CreateSpecificContent.js" />
     <EmbeddedResource Include="lang\PowerSlice.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="module.config" />
+    <EmbeddedResource Include="module.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Scripts\css\powerslice.css.map" />
+    <EmbeddedResource Include="Scripts\css\powerslice.less" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Components\ContentSliceGroup.js" />
+    <EmbeddedResource Include="Scripts\components\templates\Tasks.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\components\Tasks.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\components\CreateContentInSliceDialog.js" />
+    <EmbeddedResource Include="Scripts\components\SortDropDown.js" />
+    <EmbeddedResource Include="Scripts\components\templates\CreateContentInSliceDialog.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\css\powerslice.css" />
+    <EmbeddedResource Include="Scripts\images\commonFormArrows.png" />
+    <EmbeddedResource Include="Scripts\images\sortAscending.png" />
+    <EmbeddedResource Include="Scripts\images\sortDescending.png" />
+    <EmbeddedResource Include="Scripts\images\sorticon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\components\CreateButton.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

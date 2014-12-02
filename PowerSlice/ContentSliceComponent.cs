@@ -5,7 +5,7 @@ namespace PowerSlice
     public class ContentSliceComponent : ComponentBase
     {
         public ContentSliceComponent()
-            : base("powerslice.components.ContentSlice")
+            : base("powerslice/components/ContentSlice")
         {
         }
     }
