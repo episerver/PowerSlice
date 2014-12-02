@@ -11,7 +11,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Hosting;
 
-namespace EPiServer.Find.UI
+namespace PowerSlice
 {
     public class AssemblyResourceProvider : VirtualPathProvider
     {
@@ -22,7 +22,7 @@ namespace EPiServer.Find.UI
             {
                 if (_rootPath == null)
                 {
-                    var rootPath = Shell.Configuration.EPiServerShellSection.GetSection().ProtectedModules.RootPath;
+                    var rootPath = EPiServer.Shell.Configuration.EPiServerShellSection.GetSection().ProtectedModules.RootPath;
                     _rootPath = rootPath + "PowerSlice/";
                 }
                 return _rootPath;

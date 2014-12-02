@@ -3,7 +3,7 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Web.Hosting;
 using System.Web.Hosting;
 
-namespace EPiServer.Find.UI
+namespace PowerSlice
 {
     public class AssemblyResourceProviderRegistrationModule : IVirtualPathProviderModule
     {
