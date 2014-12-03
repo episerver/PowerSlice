@@ -181,5 +181,10 @@ namespace PowerSlice
             //Is not used for this class.
             throw new System.NotImplementedException();
         }
+
+        public override string DisplayName
+        {
+            get { return Name; }
+        }
     }
 }
