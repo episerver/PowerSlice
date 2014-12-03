@@ -4,6 +4,7 @@ define([
     "dojo/_base/array",
     "dojo/_base/lang",
     "dojo/aspect",
+    "dojo/dom-style",
 // EPi
     "epi/shell/widget/dialog/Dialog",
     "epi/shell/widget/SearchBox",
@@ -19,6 +20,7 @@ define([
     array,
     lang,
     aspect,
+    domStyle,
 // EPi
     Dialog,
     SearchBox,
@@ -130,8 +132,13 @@ define([
                 this.contentQuery.set("queryParameters", { q: this.queryText ? this.queryText.get("value") : "" });
 
                 if(selectionChanged) {
+                    // Set available create options
                     this.createButton.set("options", newQuery.createOptions);
+                    // Set available sort options and show/hide sort button
                     this.sortButton.set("options", newQuery.sortOptions);
+                    domStyle.set(this.sortButton.domNode, "display", newQuery.hideSortOptions ? "none" : null);
+                    domStyle.set(this.queryText.domNode, "width", newQuery.hideSortOptions ? "100%" : null);
+                    // Set default sort options as active
                     if (newQuery.defaultSortOption) {
                         this.sortButton.set("attribute", newQuery.defaultSortOption.key);
                         this.sortButton.set("descending", newQuery.defaultSortOption.orderDescending);
