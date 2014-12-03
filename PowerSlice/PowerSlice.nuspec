@@ -9,6 +9,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Easily list EPiServer CMS content for editors</description>
     <copyright>Copyright 2014</copyright>
+    <dependencies>
+      <dependency id="EPiServer.CMS.UI" version="[7.6.0,8)" />
+      <dependency id="EPiServer.Find.Cms" version="[7.5.394.2,8)" />
+    </dependencies>
   </metadata>
   <files>
     <file src="web.config.transform" target="content\" />
