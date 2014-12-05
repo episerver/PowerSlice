@@ -1,17 +1,16 @@
-﻿define("powerslice/components/CreateSpecificContent", [
-    "dojo",
-    "dojo/i18n",
-    "dojo/dom-attr",
+﻿define([
+    "dojo/_base/declare",
     "dojo/_base/lang",
-    "dijit",
+    "dojo/dom-attr",
+    "dojo/promise/all",
     "epi/dependency",
-    "epi-cms/component/CreateContent",
+    "epi-cms/contentediting/CreateContent",
     "epi/i18n!epi/cms/nls/episerver.cms.components.createpage"
-], function (dojo, i18n, domAttr, lang, dijit, dependency, CreateContent, res) {
+], function (declare, lang, domAttr, all, dependency, CreateContent, res) {
     // summary:
     //    Widget for language branch creation.
 
-    return dojo.declare("powerslice.components.CreateSpecificContent", [CreateContent], {
+    return declare([CreateContent], {
 
         contentTypeStore: null,
 
@@ -25,28 +24,27 @@
         },
 
         postCreate: function () {
-            this.skipContentTypeSelection = true;
             this.inherited(arguments);
+            this.skipContentTypeSelection = true;
         },
 
         updateView: function (data) {
             this.set("res", res);
 
-            this.inherited(arguments);
+            var inherited = this.getInherited(arguments),
+                self = this;
 
-            dojo.when(this.contentDataStore.get(this.predefinedParentId), dojo.hitch(this, function (parent) {
-                this.set("parent", parent);
-                dojo.when(this.contentTypeStore.get(this.predefinedContentTypeId), dojo.hitch(this, function (contentType) {
-                    this.selectedContentType = contentType;
-                    this._tryCreateContent(this.predefinedContentName, contentType);
-                }));
-            }));
-        },
-
-        getContentName: function () {
-            return this.predefinedContentName;
+            all({
+                parent: this.model.contentDataStore.get(data.predefinedParentId),
+                contentType: this.contentTypeStore.get(data.predefinedContentTypeId)
+            }).then(function(results) {
+                    inherited.call(self, {
+                        requestedType: results.contentType.typeIdentifier,
+                        parent: results.parent
+                    });
+                    self.model.set("contentName", data.predefinedContentName);
+                }
+            );
         }
-
     });
-
 });

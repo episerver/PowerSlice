@@ -14,16 +14,14 @@
         <sortbystartpublish>
           <caption>Publish date</caption>
         </sortbystartpublish>
+        <defaultcontentname>New {contentType}</defaultcontentname>
+        <filter>Filter</filter>
       </slice>
       <createdialog>
-        <headerprefix>New</headerprefix>
-        <namelabel>Name</namelabel>
-        <createbutton>
-          <caption>Create</caption>
-        </createbutton>
-        <cancelbutton>
-          <caption>Cancel</caption>
-        </cancelbutton>
+        <errormessage>
+          <missingmessage>Content name is required.</missingmessage>
+        </errormessage>
+        <message>Give your new content a name.</message>
       </createdialog>
     </powerslice>
   </language>

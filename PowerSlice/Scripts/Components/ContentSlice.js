@@ -1,190 +1,155 @@
-﻿define([
+define([
 // Dojo
-    "dojo",
     "dojo/_base/declare",
     "dojo/_base/array",
     "dojo/_base/lang",
+    "dojo/aspect",
     "dojo/dom-style",
-    "dojo/dom-geometry",
-// Dijit
-    "dijit/_TemplatedMixin",
-    "dijit/_Container",
-    "dijit/layout/_LayoutWidget",
-    "dijit/_WidgetsInTemplateMixin",
-    "dijit/form/Button",
-    "dijit/DropDownMenu",
-    "dijit/MenuItem",
-    "dijit/form/DropDownButton",
+// EPi
+    "epi/shell/widget/dialog/Dialog",
+    "epi/shell/widget/SearchBox",
+    "./Tasks",
+    "./CreateButton",
 //Custom
-    "powerslice/components/ContentSliceGrid",
-    "powerslice/components/CreateContentInSlice",
-    "epi/i18n!epi/cms/nls/powerslice.slice",
-    "dojo/text!./templates/ContentSlice.html"
+    "./ContentSliceGrid",
+    "./SortDropDown",
+    "epi/i18n!epi/cms/nls/powerslice.slice"
 ], function (
 // Dojo
-    dojo,
     declare,
     array,
     lang,
+    aspect,
     domStyle,
-    domGeometry,
-// Dijit
-    _TemplatedMixin,
-    _Container,
-    _LayoutWidget,
-    _WidgetsInTemplateMixin,
-    Button,
-    DropDownMenu,
-    MenuItem,
-    DropDownButton,
+// EPi
+    Dialog,
+    SearchBox,
+    Tasks,
+    CreateButton,
 // Custom
     ContentSliceGrid,
-    CreateContentInSlice,
-    resources,
-    template
+    SortDropDown,
+    i18n
 ) {
-    return declare("powerslice.components.ContentSlice",
-        [_Container, _LayoutWidget, _TemplatedMixin, _WidgetsInTemplateMixin], {
-            templateString: template,
-            resources: resources,
-            sortControls: null,
-            
-            postCreate: function () {
-                this.inherited(arguments);
-                this.orderDescending = false;
-                this.addCreateButton();
-                this.sortControls = [];
-                this.addSortControls();
-                
-                if (this.hideSortOptions) {
-                    domStyle.set(this.sortOptionsNode, 'display', 'none');
-                }
+    return declare([Tasks], {
 
-                if (this.defaultSortOption) {
-                    this.sortKey = this.defaultSortOption.key;
-                    this.orderDescending = this.defaultSortOption.orderDescending;
-                }
-                
-                this._reloadQuery();
-            },
-            
-            resize: function (newSize) {
-                this.inherited(arguments);
+        // gridClass: epi-cms/component/ContentQueryGrid
+        //      A ContentQueryGrid or compatible for displaying content results
+        gridClass: ContentSliceGrid,
 
-                var toolbarSize = domGeometry.getMarginBox(this.toolbar);
+        // orderDescending: bool
+        //      Whether to order results in descending order
+        orderDescending: false,
 
-                var gridSize = { w: newSize.w, h: newSize.h - toolbarSize.h };
+        // orderDescending: ./CreateButton
+        //      Widget showing a Button or DropDownButton depending on options
+        createButton: null,
 
-                this.contentQuery.resize(gridSize);
-            },
-            
-            addCreateButton: function () {
-                if (!this.createOptions || this.createOptions.length === 0) {
-                    return;
-                }
-                
-                var that = this;
-                var button;
-                
-                if (this.createOptions.length == 1) {
-                    button = new Button({
-                        "class": "epi-mediumButton",
-                        iconClass: "epi-iconPlus",
-                        showLabel: false,
-                        title: that.resources.createbutton.singleoptionprefix + " " + that.createOptions[0].label,
-                        onClick: function () {
-                            that._createContent(that.createOptions[0]);
-                        }
+        // orderDescending: ./SortDropDown
+        //      DropDownButton used to set or show current sort order
+        sortButton: null,
+
+        // reloadInterval: Number
+        //      Stores the ID of the timer used in _reloadQuery
+        reloadInterval: null,
+
+        i18n: i18n,
+
+        buildRendering: function () {
+            this.inherited(arguments);
+
+            this.createButton = new CreateButton();
+            this.toolbar.addChild(this.createButton, 1);
+
+            this.queryText = new SearchBox({
+                placeHolder: i18n.filter,
+                onChange: lang.hitch(this, function(value) {
+                    this._reloadQuery(500);
+                }),
+                intermediateChanges: true
+            });
+            this.toolbar.addChild(this.queryText);
+            this.own(this.queryText);
+
+            //▲▼
+            this.sortButton = this._createSortDropDown();
+            this.toolbar.addChild(this.sortButton);
+            this.own(this.sortButton);
+        },
+
+        _getCurrentQueryAttr: function() {
+            return this._getQuery(this.contentQuery.get("queryName"));
+        },
+
+        _getQuery: function (name) {
+            var q = array.filter(this.queries, function(item) {
+                return name === item.name;
+            }, this);
+            return q.length > 0 ? q[0] : {};
+        },
+
+        _createSortDropDown: function () {
+            var dd = new SortDropDown({
+                "class": "epi-chromeless",
+                iconClass: "epi-iconSort",
+                showLabel: false,
+                title: this.i18n.createbutton.multipleoptions
+            });
+            dd.own(
+                // Update sort icons to reflect current sort state
+                aspect.after(this.contentQuery.grid, "renderArray", function(response, args) {
+                    var sort = args.length > 2 && args[2].sort && args[2].sort.length > 0 ? args[2].sort[0] : {};
+                    response.then(function() {
+                        dd.set("sortIcon", sort);
                     });
-                } else {
-                    var menu = new DropDownMenu({ style: "display: none;" });
-                    
-                    array.forEach(this.createOptions, function (createOption) {
-                        var menuItem = new MenuItem({
-                            label: createOption.label,
-                            onClick: function () {
-                                that._createContent(createOption);
-                            }
-                        });
+                    return response;
+                }),
+                dd.watch("attribute", lang.hitch(this, function(name, oldValue, newValue) {
+                    this.sortKey = newValue;
+                    this._reloadQuery();
+                })),
+                dd.watch("descending", lang.hitch(this, function(name, oldValue, newValue) {
+                    this.orderDescending = newValue;
+                    this._reloadQuery();
+                }))
+            );
+            return dd;
+        },
 
-                        menu.addChild(menuItem);
-                    });
-
-                    button = new DropDownButton({
-                        "class": "epi-mediumButton epi-disabledDropdownArrow",
-                        iconClass: "epi-iconPlus",
-                        showLabel: false,
-                        title: that.resources.createbutton.multipleoptions,
-                        dropDown: menu
-                    });
-                }
-                this.queryNode.appendChild(button.domNode);
-            },
-            
-            addSortControls: function() {
-                if (!this.sortOptions || this.sortOptions.length === 0) {
-                    return;
-                }
-                var that = this;
-                //▲▼
-                array.forEach(this.sortOptions, function(sortOption) {
-                    var sortButton = new Button({
-                        label: sortOption.label,
-                        "class": "epi-chromelessButton",
-                        onClick: function () {
-                            if (that.sortKey === sortOption.key) {
-                                that.orderDescending = !that.orderDescending;
-                            } else {
-                                that.orderDescending = sortOption.orderDescending;
-                            }
-                            that.sortKey = sortOption.key;
-                            
-                            that._reloadQuery();
-                        }
-                    });
-                    that.sortOptionsNode.appendChild(sortButton.domNode);
-                    that.sortControls.push({ key: sortOption.key, button: sortButton });
-                });
-            },
-            
-            _queryTextChanged: function (value) {
-                if (value) {
-                    this.sortKey = null;
-                } else if(this.defaultSortOption){
-                    this.sortKey = this.defaultSortOption.key;
-                    this.orderDescending = this.defaultSortOption.orderDescending;
-                }
-                
-                this._reloadQuery();
-            },
-
-            _reloadQuery: function () {
-                var that = this;
-                array.forEach(this.sortControls, function (sortControl) {
-                    if (that.sortKey && sortControl.key === that.sortKey) {
-                        dojo.addClass(sortControl.button.domNode, 'epi-boldButton');
-                    } else {
-                        dojo.removeClass(sortControl.button.domNode, 'epi-boldButton');
-                    }
-                });
-                if (this.sortKey) {
-                    this.contentQuery.set("sortKey", this.sortKey);
-                    this.contentQuery.set("descending", this.orderDescending);
-                } else {
-                    this.contentQuery.set("sortKey", null);
-                }
-                this.contentQuery.set("queryParameters", { q: this.queryText.value });
-                this.contentQuery.set("queryName", this.queryName);
-            },
-            
-            _createContent: function (createOption) {
-                var createDialog = new CreateContentInSlice({ settings: createOption });
-                dojo.connect(createDialog, "onClose", lang.hitch(this, function () {
-                    domStyle.set(this.tools, 'display', null);
-                }));
-                this.toolbar.appendChild(createDialog.domNode);
-                domStyle.set(this.tools, 'display', 'none');
+        _reloadQuery: function (delay) {
+            var supermethod = this.getInherited(arguments);
+            if(this.reloadInterval) {
+                clearInterval(this.reloadInterval);
             }
-        });
+            this.reloadInterval = setInterval(lang.hitch(this, function() {
+                var newQueryName = this.querySelection && this.querySelection.get("value"),
+                    newQuery = this._getQuery(newQueryName),
+                    selectionChanged = newQueryName !== this.contentQuery.get("queryName");
 
+                // Set parameters for contentQuery
+                this.contentQuery.set("sortKey", this.sortKey || null);
+                this.contentQuery.set("descending", this.sortKey ? this.orderDescending : false);
+                this.contentQuery.set("queryParameters", { q: this.queryText ? this.queryText.get("value") : "" });
+
+                if(selectionChanged) {
+                    // Set available create options
+                    this.createButton.set("options", newQuery.createOptions);
+                    // Set available sort options and show/hide sort button
+                    this.sortButton.set("options", newQuery.sortOptions);
+                    domStyle.set(this.sortButton.domNode, "display", newQuery.hideSortOptions ? "none" : null);
+                    domStyle.set(this.queryText.domNode, "width", newQuery.hideSortOptions ? "100%" : null);
+                    // Set default sort options as active
+                    if (newQuery.defaultSortOption) {
+                        this.sortButton.set("attribute", newQuery.defaultSortOption.key);
+                        this.sortButton.set("descending", newQuery.defaultSortOption.orderDescending);
+                    }
+                }
+
+                // Run super method
+                supermethod.apply(this);
+                clearInterval(this.reloadInterval);
+            }), delay || 1);
+        }
+
+    });
 });

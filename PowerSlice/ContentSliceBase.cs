@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EPiServer;
-using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
+using EPiServer.Shell.ContentQuery;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Find;
@@ -10,10 +10,12 @@ using EPiServer.Find.Cms;
 using EPiServer.Framework.Localization;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
+using EPiServer.Shell.Rest;
+using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
 
 namespace PowerSlice
 {
-    public abstract class ContentSliceBase<TContent> : IContentSlice, ISortableContentSlice<TContent> 
+    public abstract class ContentSliceBase<TContent> : ContentQueryBase, IContentSlice, ISortableContentSlice<TContent> 
         where TContent : IContentData
     {
         protected IClient SearchClient;
@@ -21,6 +23,7 @@ namespace PowerSlice
         protected IContentLoader ContentLoader;
 
         protected ContentSliceBase(IClient searchClient, IContentTypeRepository contentTypeRepository, IContentLoader contentLoader)
+            : base(ServiceLocator.Current.GetInstance<IContentRepository>(), ServiceLocator.Current.GetInstance<IContentQueryHelper>())
         {
             SearchClient = searchClient;
             ContentTypeRepository = contentTypeRepository;
@@ -31,10 +34,12 @@ namespace PowerSlice
             : this(EPiServer.Find.Framework.SearchClient.Instance, ServiceLocator.Current.GetInstance<IContentTypeRepository>(), ServiceLocator.Current.GetInstance<IContentLoader>())
         {}
 
-        public virtual ContentRange ExecuteQuery(ContentQueryParameters parameters)
+        public override QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
+            var contentQueryParam = parameters as ContentQueryParameters;
+
             var searchRequest = SearchClient.Search<TContent>()
-                .FilterOnLanguages(new [] { parameters.PreferredCulture.Name });
+                .FilterOnLanguages(new[] { contentQueryParam.PreferredCulture.Name });
 
             var searchPhrase = parameters.AllParameters["q"];
             var hasFreeTextQuery = !string.IsNullOrWhiteSpace(searchPhrase) && searchPhrase != "*";
@@ -43,19 +48,24 @@ namespace PowerSlice
                 searchRequest = ApplyTextSearch(searchRequest, searchPhrase);
             }
 
-            searchRequest = Filter(searchRequest, parameters);
+            searchRequest = Filter(searchRequest, contentQueryParam);
 
             searchRequest = ApplyVisibilityFilter(searchRequest);
 
-            if (parameters.SortColumns != null && parameters.SortColumns.Any())
+            if (contentQueryParam.SortColumns != null && contentQueryParam.SortColumns.Any())
             {
-                var sortColumn = parameters.SortColumns.FirstOrDefault();
+                var sortColumn = contentQueryParam.SortColumns.FirstOrDefault();
                 searchRequest = ApplySorting(searchRequest, sortColumn);
             }
 
+            if(parameters.Range.Start.HasValue && parameters.Range.End.HasValue)
+            {
+                searchRequest = searchRequest
+                .Skip(parameters.Range.Start.Value)
+                .Take(parameters.Range.End.Value);
+            }
+
             var result = searchRequest
-                .Skip(parameters.Range.Start)
-                .Take(parameters.Range.End)
                 .GetContentResult(CacheForSeconds, true);
 
             var itemRange = new ItemRange
@@ -85,7 +95,7 @@ namespace PowerSlice
             {
                 return searchRequest;
             }
-            var sortOrder = sortColumn.SortDescending ? SortOrder.Descending : SortOrder.Ascending;
+            var sortOrder = sortColumn.SortDescending ? EPiServer.Find.Api.SortOrder.Descending : EPiServer.Find.Api.SortOrder.Ascending;
             return sortOption.SortFunction(searchRequest, sortOrder);
         }
 
@@ -97,8 +107,6 @@ namespace PowerSlice
                                 .Include(x => ((IContent)x).Name.PrefixCaseInsensitive(searchPhrase), 1.5)
                                 .Include(x => ((IContent)x).Name.AnyWordBeginsWith(searchPhrase));
         }
-
-        public abstract string Name { get; }
 
         public virtual int Order
         {
@@ -145,7 +153,7 @@ namespace PowerSlice
         {
             return new SortAction<TContent>(LocalizationService.Current.GetString("/powerslice/slice/sortbyname/caption"), "name", (search, order) =>
                 {
-                    if (order == SortOrder.Ascending)
+                    if (order == EPiServer.Find.Api.SortOrder.Ascending)
                     {
                         return search.OrderBy(x => ((IContent)x).Name);
                     }
@@ -157,7 +165,7 @@ namespace PowerSlice
         {
             return new SortAction<TContent>(LocalizationService.Current.GetString("/powerslice/slice/sortbystartpublish/caption"), "startpublish", (search, order) =>
             {
-                if (order == SortOrder.Ascending)
+                if (order == EPiServer.Find.Api.SortOrder.Ascending)
                 {
                     return search.OrderBy(x => ((IVersionable)x).StartPublish, SortMissing.First);
                 }
@@ -166,6 +174,17 @@ namespace PowerSlice
             {
                 OrderDescending = true
             };
+        }
+
+        protected override IEnumerable<IContent> GetContent(ContentQueryParameters parameters)
+        {
+            //Is not used for this class.
+            throw new System.NotImplementedException();
+        }
+
+        public override string DisplayName
+        {
+            get { return Name; }
         }
     }
 }

@@ -1,7 +1,7 @@
 <configuration>
   <episerver.shell>
     <protectedModules>
-      <add name="PowerSlice" resourcePath="/modules/PowerSlice/">
+      <add name="PowerSlice">
         <assemblies>
           <add assembly="PowerSlice" />
         </assemblies>
