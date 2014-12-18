@@ -319,3 +319,30 @@
     padding-left: 0;
   }
 }
+
+.Sleek .epi-powerslice-container .queryBar {
+    margin-left: 10px;
+
+    &--hide-sorting {
+        margin-right: 10px;
+        .transition(margin, 0.3s, ease);
+
+        .epi-searchInput {
+            width: 100%;
+            .transition(width, 0.3s, ease);
+        }
+
+        .epi-sort-drop-down {
+            display: none;
+        }
+    }
+}
+
+.transition (@prop: all, @time: 1s, @ease: linear) {
+    -webkit-transition: @prop @time @ease;
+    -moz-transition: @prop @time @ease;
+    -o-transition: @prop @time @ease;
+    -ms-transition: @prop @time @ease;
+    transition: @prop @time @ease;
+}
+
