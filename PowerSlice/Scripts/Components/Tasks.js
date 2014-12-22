@@ -29,7 +29,7 @@
     array,
     lang,
     domConstruct,
-    domGeometry,
+    domGeom,
     topic,
 // Dijit
     Select,
@@ -68,7 +68,7 @@
             var toolbar, options, querySelection, reloadButton, contentQuery;
 
             toolbar = this.toolbar = new Toolbar({
-                "class": "epi-flatToolbar epi-gadgetInnerToolbar"
+                "class": "epi-flatToolbar"
             });
             this.addChild(toolbar);
 
@@ -82,7 +82,7 @@
                 };
             }, this);
             querySelection = this.querySelection = new Select({
-                "class": "epi-chromeless epi-chromeless--with-arrow  epi-flat  epi-gadget__selector",
+                "class": "epi-chromeless epi-chromeless--with-arrow epi-flat epi-gadget__selector",
                 name: "QuerySelection",
                 options: options
             });
@@ -124,17 +124,17 @@
             // tags:
             //      Public
             this.inherited(arguments);
-            this.contentQuery.resize(this._caculateContentQuerySize(newSize));
+            this.contentQuery.resize(this._calculateContentQuerySize(newSize));
         },
 
-        _caculateContentQuerySize: function (newSize) {
+        _calculateContentQuerySize: function (newSize) {
             // summary:
             //      Calculate the new Size of the Content Query
             // newSize: object
             //      The new size of Task component
             // tags:
             //      Private
-            var toolbarSize = domGeometry.getMarginBox(this.toolbar.domNode);
+            var toolbarSize = domGeom.getMarginBox(this.toolbar.domNode);
             return { w: newSize.w, h: newSize.h - toolbarSize.h };
         },
 
