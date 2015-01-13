@@ -104,6 +104,8 @@ namespace PowerSlice
             return searchRequest.For(searchPhrase)
                                 .InField(x => ((IContent) x).Name, 2)
                                 .InField(x => ((IContent)x).SearchText())
+                                .InField(x => ((IContentMedia)x).SearchFileExtension())
+                                .Include(x => ((IContentMedia)x).SearchFileExtension().PrefixCaseInsensitive(searchPhrase), 1.5)
                                 .Include(x => ((IContent)x).Name.PrefixCaseInsensitive(searchPhrase), 1.5)
                                 .Include(x => ((IContent)x).Name.AnyWordBeginsWith(searchPhrase));
         }
