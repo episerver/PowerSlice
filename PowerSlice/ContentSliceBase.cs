@@ -15,8 +15,8 @@ using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
 
 namespace PowerSlice
 {
-    public abstract class ContentSliceBase<TContent> : ContentQueryBase, IContentSlice, ISortableContentSlice<TContent> 
-        where TContent : IContentData
+    public abstract class ContentSliceBase<TContent> : ContentQueryBase, IContentSlice, ISortableContentSlice<TContent>
+        where TContent : class, IContentData
     {
         protected IClient SearchClient;
         protected IContentTypeRepository ContentTypeRepository;
@@ -38,8 +38,7 @@ namespace PowerSlice
         {
             var contentQueryParam = parameters as ContentQueryParameters;
 
-            var searchRequest = SearchClient.Search<TContent>()
-                .FilterOnLanguages(new[] { contentQueryParam.PreferredCulture.Name });
+            var searchRequest = SearchClient.Search<TContent>();
 
             var searchPhrase = parameters.AllParameters["q"];
             var hasFreeTextQuery = !string.IsNullOrWhiteSpace(searchPhrase) && searchPhrase != "*";
@@ -47,6 +46,8 @@ namespace PowerSlice
             {
                 searchRequest = ApplyTextSearch(searchRequest, searchPhrase);
             }
+
+            searchRequest = searchRequest.Filter(x => !x.MatchTypeHierarchy(typeof(ILocalizable)) | ((ILocalizable)x).Language.Name.Match(contentQueryParam.PreferredCulture.Name));
 
             searchRequest = Filter(searchRequest, contentQueryParam);
 
