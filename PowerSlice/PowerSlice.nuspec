@@ -8,10 +8,10 @@
     <owners>EPiServer AB</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Easily list EPiServer CMS content for editors</description>
-    <copyright>Copyright 2014</copyright>
+    <copyright>Copyright 2015</copyright>
     <dependencies>
-      <dependency id="EPiServer.CMS.UI" version="[7.6.0,8)" />
-      <dependency id="EPiServer.Find.Cms" version="[7.5.394.2,9)" />
+      <dependency id="EPiServer.CMS.UI" version="[8,9)" />
+      <dependency id="EPiServer.Find.Cms" version="(9,10)" />
     </dependencies>
   </metadata>
   <files>
