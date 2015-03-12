@@ -18,7 +18,7 @@ namespace PowerSlice
 
         public SlicesComponent(IEnumerable<IContentSlice> slices) : base("powerslice/components/ContentSlice")
         {
-            _slices = slices;
+            _slices = slices.OrderBy(x => x.SortOrder);
             Categories = new [] { "cms" };
 
             PlugInAreas = new [] { "/episerver/cms/assets" };
