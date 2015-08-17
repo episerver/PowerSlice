@@ -66,8 +66,7 @@ namespace PowerSlice
                 .Take(parameters.Range.End.Value);
             }
 
-            var result = searchRequest
-                .GetContentResult(CacheForSeconds, true);
+            var result = searchRequest.GetContentResult();
 
             var itemRange = new ItemRange
                 {
@@ -119,11 +118,6 @@ namespace PowerSlice
         public virtual IEnumerable<CreateOption> CreateOptions
         {
             get { return null; }
-        }
-
-        public virtual int CacheForSeconds
-        {
-            get { return 600; }
         }
 
         public IEnumerable<SortOption> SortOptions
