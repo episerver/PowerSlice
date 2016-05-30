@@ -11,7 +11,7 @@
     <copyright>Copyright 2015</copyright>
     <dependencies>
       <dependency id="EPiServer.CMS.UI" version="[8,10)" />
-      <dependency id="EPiServer.Find.Cms" version="(9,12)" />
+      <dependency id="EPiServer.Find.Cms" version="(9,13)" />
     </dependencies>
   </metadata>
   <files>
