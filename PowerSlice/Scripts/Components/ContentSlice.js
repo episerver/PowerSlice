@@ -132,7 +132,7 @@ define([
                 "class": "epi-chromeless epi-sort-drop-down",
                 iconClass: "epi-iconSort",
                 showLabel: false,
-                title: this.i18n.createbutton.multipleoptions
+                title: this.i18n.sortbutton
             });
             dd.own(
                 // Update sort icons to reflect current sort state

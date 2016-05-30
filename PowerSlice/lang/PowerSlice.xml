@@ -8,6 +8,7 @@
           <multipleoptions>Create content</multipleoptions>
           <singleoptionprefix>New</singleoptionprefix>
         </createbutton>
+				<sortbutton>Sort</sortbutton>
         <sortbyname>
           <caption>Name</caption>
         </sortbyname>
