@@ -230,7 +230,7 @@ define([
                 this.toolbar.addChild(this.dropDown, 1);
             } else {
                 var option = options && options.length === 1 ? options[0] : {};
-                var title = i18n && i18n.createbutton ?
+                var title = i18n && i18n.createbutton && option.label ?
                     i18n.createbutton.singleoptionprefix + " " + option.label :
                     "";
                 this.button.set("title", title);
