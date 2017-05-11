@@ -65,17 +65,24 @@ namespace PowerSlice
                 .Skip(parameters.Range.Start.Value)
                 .Take(parameters.Range.End.Value);
             }
+            
+            try
+            {
+                var result = searchRequest.GetContentResult();
 
-            var result = searchRequest.GetContentResult();
-
-            var itemRange = new ItemRange
-                {
-                    Total = result.TotalMatching,
-                    Start = parameters.Range.Start,
-                    End = parameters.Range.End
-                };
-            var contentRange = new ContentRange(result.OfType<IContent>(), itemRange);
-            return contentRange;
+                var itemRange = new ItemRange
+                    {
+                        Total = result.TotalMatching,
+                        Start = parameters.Range.Start,
+                        End = parameters.Range.End
+                    };
+                var contentRange = new ContentRange(result.OfType<IContent>(), itemRange);
+                return contentRange;
+            }
+            catch
+            {
+                return new ContentRange(Enumerable.Empty<IContent>(), new ItemRange {Total = 0, Start = 0, End = 0 });
+            }
         }
 
         protected virtual ITypeSearch<TContent> Filter(ITypeSearch<TContent> searchRequest, ContentQueryParameters parameters)
