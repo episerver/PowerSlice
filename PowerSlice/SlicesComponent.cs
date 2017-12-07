@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EPiServer.ServiceLocation;
-using EPiServer.Shell;
-using EPiServer.Shell.Gadgets;
 using EPiServer.Shell.ViewComposition;
-using EPiServer.Shell.ViewComposition.Containers;
 
 namespace PowerSlice
 {
