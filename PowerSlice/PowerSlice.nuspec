@@ -10,8 +10,12 @@
     <description>Easily list EPiServer CMS content for editors</description>
     <copyright>Copyright 2015</copyright>
     <dependencies>
-      <dependency id="EPiServer.CMS.UI" version="[8,11)" />
-      <dependency id="EPiServer.Find.Cms" version="(9,13)" />
+      <dependency id="EPiServer.CMS.Core" version="[11.1.0, 12)" />
+      <dependency id="EPiServer.CMS.UI.Core" version="[11.1.0, 12)" />
+      <dependency id="EPiServer.Find" version="(12.7.0,13)" />
+      <dependency id="EPiServer.Find.Cms" version="(12.7.0,13)" />
+      <dependency id="EPiServer.Framework" version="[11.1.0, 12)" />
+      <dependency id="EPiServer.Framework.AspNet" version="[11.1.0, 12)" />
     </dependencies>
   </metadata>
   <files>
