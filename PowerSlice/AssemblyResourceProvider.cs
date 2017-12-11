@@ -1,5 +1,4 @@
 ﻿using EPiServer.Web;
-using EPiServer.Web.Hosting;
 using System;
 using System.Collections;
 using System.Globalization;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Hosting;
+using EPiServer.ServiceLocation;
 
 namespace PowerSlice
 {
@@ -52,7 +52,7 @@ namespace PowerSlice
 
         public static string GetResourcePath(string path)
         {
-            string checkPath = VirtualPathUtilityEx.ToAppRelative(path);
+            string checkPath = ServiceLocator.Current.GetInstance<IVirtualPathResolver>().ToAppRelative(path);
 
             if (checkPath.StartsWith(AssemblyResourceProvider.ModuleRootPath, StringComparison.OrdinalIgnoreCase))
             {
@@ -78,7 +78,7 @@ namespace PowerSlice
 
             try
             {
-                string checkPath = VirtualPathUtilityEx.ToAppRelative(virtualPath);
+                string checkPath = ServiceLocator.Current.GetInstance<IVirtualPathResolver>().ToAppRelative(virtualPath);
                 var appResourcePath = checkPath.StartsWith(ModuleRootPath, StringComparison.OrdinalIgnoreCase);
                 return appResourcePath;
             }
@@ -97,7 +97,7 @@ namespace PowerSlice
 
             try
             {
-                String checkPath = VirtualPathUtilityEx.ToAppRelative(virtualPath);
+                string checkPath = ServiceLocator.Current.GetInstance<IVirtualPathResolver>().ToAppRelative(virtualPath);
                 return checkPath.EndsWith("/") && checkPath.StartsWith(ModuleRootPath, StringComparison.OrdinalIgnoreCase);
             }
             catch (HttpException)
@@ -139,7 +139,6 @@ namespace PowerSlice
         {
             if (IsAppResourcePath(virtualPath))
             {
-                var pathRelative = VirtualPathUtilityEx.ToAppRelative(virtualPath);
                 var stringBuilder = new StringBuilder();
                 stringBuilder.Append(GetLocalFileHash(virtualPath));
                 if (virtualPathDependencies != null)
@@ -208,18 +207,18 @@ namespace PowerSlice
 
     class AssemblyResourceVirtualFile : VirtualFile
     {
-        string path;
+        private readonly string path;
         public AssemblyResourceVirtualFile(string virtualPath)
             : base(virtualPath)
         {
-            path = VirtualPathUtilityEx.ToAppRelative(virtualPath);
+            path = ServiceLocator.Current.GetInstance<IVirtualPathResolver>().ToAppRelative(virtualPath);
         }
 
         public override Stream Open()
         {
             var resourcePath = AssemblyResourceProvider.GetResourcePath(path);
 
-            if (!String.IsNullOrEmpty(resourcePath))
+            if (!string.IsNullOrEmpty(resourcePath))
             {
                 var stream = AssemblyResourceProvider.ModuleAssembly.GetManifestResourceStream(resourcePath);
 
