@@ -217,7 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="module.config" />
-    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
