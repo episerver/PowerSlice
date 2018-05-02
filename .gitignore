@@ -164,4 +164,4 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
-/.vs/PowerSlice/v15/Server/sqlite3
+/.vs/**/*
