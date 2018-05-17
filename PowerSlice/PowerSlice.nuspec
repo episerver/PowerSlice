@@ -8,12 +8,12 @@
     <owners>EPiServer AB</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Easily list EPiServer CMS content for editors</description>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2018</copyright>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[11.1.0, 12)" />
       <dependency id="EPiServer.CMS.UI.Core" version="[11.1.0, 12)" />
-      <dependency id="EPiServer.Find" version="(12.7.0,13)" />
-      <dependency id="EPiServer.Find.Cms" version="(12.7.0,13)" />
+      <dependency id="EPiServer.Find" version="[13,14)" />
+      <dependency id="EPiServer.Find.Cms" version="[13,14)" />
       <dependency id="EPiServer.Framework" version="[11.1.0, 12)" />
       <dependency id="EPiServer.Framework.AspNet" version="[11.1.0, 12)" />
     </dependencies>
