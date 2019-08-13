@@ -5,7 +5,6 @@ namespace PowerSlice
 {
     public interface IContentSlice : IContentQuery
     {
-        int Order { get; }
         IEnumerable<CreateOption> CreateOptions { get; }
     }
 }
