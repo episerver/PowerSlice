@@ -165,6 +165,7 @@ define([
             this._set("hideSortOptions", hide);
         },
 
+
         _reloadQuery: function (delay) {
             var supermethod = this.getInherited(arguments);
             if(this.reloadInterval) {
@@ -175,9 +176,20 @@ define([
                     newQuery = this._getQuery(newQueryName),
                     selectionChanged = newQueryName !== this.contentQuery.get("queryName");
 
+                if (selectionChanged) {
+                    // Set the sort and order based on the defaults
+                    if (newQuery.defaultSortOption) {
+                        this.sortKey = newQuery.defaultSortOption.key;
+                        this.orderDescending = newQuery.defaultSortOption.orderDescending;
+                    } else {
+                        this.sortKey = null;
+                        this.orderDescending = false;
+                    }
+                }
+
                 // Set parameters for contentQuery
-                this.contentQuery.set("sortKey", this.sortKey || null);
-                this.contentQuery.set("descending", this.sortKey ? this.orderDescending : false);
+                this.contentQuery.set("sortKey", this.sortKey);
+                this.contentQuery.set("descending", this.orderDescending);
                 this.contentQuery.set("queryParameters", { q: this.queryText ? this.queryText.get("value") : "" });
 
                 if(selectionChanged && this.sortButton) {
@@ -186,7 +198,6 @@ define([
                     // Set available sort options and show/hide sort button
                     this.set("sortOptions", newQuery.sortOptions);
                     this.set("hideSortOptions", newQuery.hideSortOptions);
-
 
                     // Set default sort options as active
                     if (newQuery.defaultSortOption) {
