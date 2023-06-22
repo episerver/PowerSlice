@@ -116,11 +116,6 @@ namespace PowerSlice
                                 .Include(x => ((IContent)x).Name.AnyWordBeginsWith(searchPhrase));
         }
 
-        public virtual int Order
-        {
-            get { return 0; }
-        }
-
         public virtual IEnumerable<CreateOption> CreateOptions
         {
             get { return null; }
